@@ -9,10 +9,15 @@ const app = express();
 connectDB();
 
 // Middleware
+// app.use(cors({
+//   origin: 'http://localhost:3000',
+//   credentials: true
+// }));
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: '*',
   credentials: true
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -57,7 +62,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
