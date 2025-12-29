@@ -1,7 +1,7 @@
 ﻿const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const users = require('../models/User');
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-plant-shop-2024';
@@ -13,12 +13,12 @@ router.post('/register', async (req, res) => {
     if (!name || !email || !password)
       return res.status(400).json({ message: 'Provide name, email, and password' });
 
-    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    const existingUser = await users.findOne({ email: email.toLowerCase() });
     if (existingUser) return res.status(400).json({ message: 'Email already registered' });
 
     const hashedPassword = await bcrypt.hash(password, 12); // stronger hash
 
-    const newUser = await User.create({
+    const newUser = await users.create({
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
@@ -43,7 +43,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Provide email and password' });
 
     // ✅ Important: explicitly select password
-    const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
+    const user = await users.findOne({ email: email.toLowerCase() }).select('+password');
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 
     if (!user.password) {
