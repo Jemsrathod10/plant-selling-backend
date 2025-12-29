@@ -92,4 +92,4 @@ userSchema.methods.addToCart = function(productId, quantity = 1) {
   return this.save();
 };
 
-module.exports = mongoose.models.User || mongoose.model('User', userSchema);
+module.exports = mongoose.models.users || mongoose.model('users', userSchema);
